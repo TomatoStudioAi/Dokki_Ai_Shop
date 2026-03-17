@@ -18,9 +18,8 @@ class ConnectBotScreen extends ConsumerStatefulWidget {
 }
 
 class _ConnectBotScreenState extends ConsumerState<ConnectBotScreen> {
-  // Временно замени это:
-  final _tokenController = TextEditingController(
-      text: '8667371693:AAG7XOyBunNHLNuhscvwOy5WaxGhOdMOQUE');
+  // ИСПРАВЛЕНО: Поле пустое, токен больше не хардкодим
+  final _tokenController = TextEditingController();
   bool _isLoading = false;
 
   @override
@@ -41,17 +40,16 @@ class _ConnectBotScreenState extends ConsumerState<ConnectBotScreen> {
     setState(() => _isLoading = true);
 
     try {
-      // 1. Валидация токена через Telegram API
+      // 1. Валидация нового (отозванного и перевыпущенного) токена
       final botInfo =
           await ref.read(telegramRepositoryProvider).validateToken(token);
 
-      // 2. Сохранение в Supabase и получение объекта Business
+      // 2. Сохранение в Supabase
       final result = await ref.read(businessRepositoryProvider).connectBot(
             botId: widget.botId,
             botToken: token,
           );
 
-      // 3. Переход на экран управления ботом
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -60,7 +58,6 @@ class _ConnectBotScreenState extends ConsumerState<ConnectBotScreen> {
           ),
         );
 
-        // Заменяем текущий экран на экран управления, передавая данные
         context.pushReplacement(
           '/bot-management/${result.id}',
           extra: result,
@@ -84,9 +81,7 @@ class _ConnectBotScreenState extends ConsumerState<ConnectBotScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Подключение ${widget.botName}'),
-      ),
+      appBar: AppBar(title: Text('Подключение ${widget.botName}')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),
         child: Column(
@@ -102,9 +97,9 @@ class _ConnectBotScreenState extends ConsumerState<ConnectBotScreen> {
               child: const Padding(
                 padding: EdgeInsets.all(16.0),
                 child: Text(
-                  '1. Откройте @BotFather в Telegram.\n'
-                  '2. Создайте нового бота (/newbot) или выберите существующего (/mybots).\n'
-                  '3. Скопируйте API Token и вставьте его в поле ниже.',
+                  '1. Откройте @BotFather.\n'
+                  '2. Сгенерируйте НОВЫЙ токен (Revoke), если старый был скомпрометирован.\n'
+                  '3. Вставьте новый токен в поле ниже.',
                   style: TextStyle(height: 1.5),
                 ),
               ),
@@ -114,13 +109,11 @@ class _ConnectBotScreenState extends ConsumerState<ConnectBotScreen> {
               controller: _tokenController,
               decoration: const InputDecoration(
                 labelText: 'Bot API Token',
-                hintText: '123456789:ABCDefGhIJKlmNoP...',
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.vpn_key),
               ),
               enabled: !_isLoading,
               autocorrect: false,
-              enableInteractiveSelection: true,
             ),
             const SizedBox(height: 24),
             SizedBox(
@@ -128,19 +121,8 @@ class _ConnectBotScreenState extends ConsumerState<ConnectBotScreen> {
               height: 50,
               child: ElevatedButton(
                 onPressed: _isLoading ? null : _connect,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  foregroundColor: Colors.white,
-                ),
                 child: _isLoading
-                    ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: Colors.white,
-                        ),
-                      )
+                    ? const CircularProgressIndicator()
                     : const Text('Проверить и подключить'),
               ),
             ),
