@@ -7,6 +7,7 @@ import '../domain/business_repository.dart';
 import '../data/business_repository_impl.dart';
 import '../data/telegram_repository.dart';
 import '../data/appointments_repository.dart';
+import '../data/bot_config_repository.dart';
 
 // 1. Провайдер Telegram API
 final telegramRepositoryProvider = Provider<TelegramRepository>((ref) {
@@ -21,7 +22,7 @@ final businessRepositoryProvider = Provider<BusinessRepository>((ref) {
 // 3. Провайдер списка подключенных ботов (НУЖЕН ДЛЯ КАТАЛОГА)
 final connectedBotsProvider = FutureProvider<List<Business>>((ref) async {
   final repository = ref.watch(businessRepositoryProvider);
-  return repository.getBusinesses();
+  return repository.getConnectedBots();
 });
 
 // 4. Провайдер репозитория записей (TomatoAdmin)
@@ -39,4 +40,22 @@ final appointmentsProvider =
     FutureProvider.family<List<Map<String, dynamic>>, Business>(
         (ref, business) async {
   return ref.watch(appointmentsRepositoryProvider(business)).getAppointments();
+});
+
+// 6. Провайдер репозитория конфигурации бота
+final botConfigRepositoryProvider =
+    Provider.family<BotConfigRepository, Business>((ref, business) {
+  final client = SupabaseClient(
+    business.botSupabaseUrl!,
+    business.botSupabaseAnonKey!,
+  );
+  return BotConfigRepository(client);
+});
+
+// 7. Провайдер конфигурации
+final botConfigProvider =
+    FutureProvider.family<Map<String, dynamic>?, Business>(
+        (ref, business) async {
+  final businessId = business.botBusinessId ?? business.id;
+  return ref.watch(botConfigRepositoryProvider(business)).getConfig(businessId);
 });

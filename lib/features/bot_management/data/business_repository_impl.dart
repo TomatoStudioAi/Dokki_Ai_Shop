@@ -8,7 +8,7 @@ class BusinessRepositoryImpl implements BusinessRepository {
   BusinessRepositoryImpl(this._client);
 
   @override
-  Future<List<Business>> getBusinesses() async {
+  Future<List<Business>> getConnectedBots() async {
     final userId = _client.auth.currentUser?.id;
     if (userId == null) throw Exception('Пользователь не авторизован');
 
@@ -29,7 +29,6 @@ class BusinessRepositoryImpl implements BusinessRepository {
     final userId = _client.auth.currentUser?.id;
     if (userId == null) throw Exception('Пользователь не авторизован');
 
-    // При вставке возвращаем все поля, включая bot_supabase_url и anon_key
     final response = await _client
         .from('businesses')
         .insert({

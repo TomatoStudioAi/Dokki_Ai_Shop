@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/business.dart';
 import 'appointments_screen.dart';
+import 'bot_config_screen.dart';
 
 class BotManagementScreen extends ConsumerWidget {
   final Business business;
@@ -35,7 +36,7 @@ class BotManagementScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 16),
 
-            // Кнопка записей (Твое задание)
+            // Кнопка записей
             SizedBox(
               width: double.infinity,
               child: OutlinedButton.icon(
@@ -47,6 +48,23 @@ class BotManagementScreen extends ConsumerWidget {
                 ),
                 icon: const Icon(Icons.calendar_today),
                 label: const Text('Записи'),
+              ),
+            ),
+
+            const SizedBox(height: 12),
+
+            // Кнопка Настройки
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => BotConfigScreen(business: business),
+                  ),
+                ),
+                icon: const Icon(Icons.settings),
+                label: const Text('Настройки'),
               ),
             ),
 
