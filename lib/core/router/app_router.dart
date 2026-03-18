@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../features/auth/presentation/screens/auth_screen.dart';
-import '../../features/catalog/presentation/screens/catalog_screen.dart';
+import '../navigation/main_screen.dart';
 import '../../features/bot_management/presentation/screens/connect_bot_screen.dart';
 import '../../features/bot_management/presentation/screens/bot_management_screen.dart';
 import '../../features/bot_management/domain/business.dart';
@@ -25,7 +25,7 @@ final routerProvider = Provider<GoRouter>((ref) {
     routes: [
       GoRoute(
         path: '/',
-        builder: (context, state) => const CatalogScreen(),
+        builder: (context, state) => const MainScreen(),
       ),
       GoRoute(
         path: '/auth',

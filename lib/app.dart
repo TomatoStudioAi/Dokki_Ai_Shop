@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/router/app_router.dart';
+import 'core/theme/app_theme.dart';
 
 class DokkiApp extends ConsumerWidget {
   const DokkiApp({super.key});
@@ -11,10 +12,8 @@ class DokkiApp extends ConsumerWidget {
 
     return MaterialApp.router(
       title: 'Dokki AI Shop',
-      theme: ThemeData(
-        useMaterial3: true,
-        colorSchemeSeed: Colors.blue,
-      ),
+      theme: AppTheme.dark,
+      debugShowCheckedModeBanner: false,
       routerConfig: router,
     );
   }
