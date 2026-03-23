@@ -13,8 +13,6 @@ class DokkiApp extends ConsumerWidget {
     return MaterialApp.router(
       title: 'Dokki AI Shop',
       theme: AppTheme.dark,
-      darkTheme: AppTheme.dark, // Фиксация темы
-      themeMode: ThemeMode.light, // Отключение системного темного режима
       debugShowCheckedModeBanner: false,
       routerConfig: router,
     );

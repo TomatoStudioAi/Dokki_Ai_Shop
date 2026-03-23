@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import '../../../../core/theme/app_theme.dart';
 import '../../domain/bot.dart';
 
@@ -41,16 +41,13 @@ class BotDetailScreen extends StatelessWidget {
                             fontSize: 28,
                             fontWeight: FontWeight.bold,
                             color: AppColors.textPrimary,
-                            fontFamily: GoogleFonts.nunito().fontFamily,
                           ),
                         ),
                         const SizedBox(height: 8),
                         Chip(
                           label: Text(bot.category),
                           backgroundColor: AppColors.card,
-                          labelStyle: TextStyle(
-                              color: AppColors.textSecondary,
-                              fontFamily: GoogleFonts.nunito().fontFamily),
+                          labelStyle: TextStyle(color: AppColors.textSecondary),
                           side: BorderSide.none,
                           visualDensity: VisualDensity.compact,
                         ),
@@ -61,7 +58,6 @@ class BotDetailScreen extends StatelessWidget {
                             color: AppColors.textSecondary,
                             fontSize: 16,
                             height: 1.5,
-                            fontFamily: GoogleFonts.nunito().fontFamily,
                           ),
                         ),
                         if (bot.features != null &&
@@ -73,7 +69,6 @@ class BotDetailScreen extends StatelessWidget {
                               color: AppColors.textPrimary,
                               fontSize: 18,
                               fontWeight: FontWeight.w600,
-                              fontFamily: GoogleFonts.nunito().fontFamily,
                             ),
                           ),
                           const SizedBox(height: 12),
@@ -141,10 +136,7 @@ class BotDetailScreen extends StatelessWidget {
           Expanded(
             child: Text(
               feature,
-              style: TextStyle(
-                  color: AppColors.textPrimary,
-                  fontSize: 15,
-                  fontFamily: GoogleFonts.nunito().fontFamily),
+              style: TextStyle(color: AppColors.textPrimary, fontSize: 15),
             ),
           ),
         ],
@@ -173,10 +165,7 @@ class BotDetailScreen extends StatelessWidget {
           ),
           child: Text(
             "Подключить",
-            style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                fontFamily: GoogleFonts.nunito().fontFamily),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
         ),
       ),

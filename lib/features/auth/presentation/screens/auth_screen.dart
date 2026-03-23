@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../providers/auth_providers.dart';
 import '../../../../core/theme/app_theme.dart'; // Добавлен импорт темы
 
@@ -60,10 +59,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   InputDecoration _buildInputDecoration(String hint) {
     return InputDecoration(
       hintText: hint,
-      hintStyle: TextStyle(
-        color: AppColors.textSecondary,
-        fontFamily: GoogleFonts.nunito().fontFamily,
-      ),
+      hintStyle: const TextStyle(color: AppColors.textSecondary),
       filled: true,
       fillColor: AppColors.card,
       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -105,26 +101,24 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                         end: Alignment.bottomRight,
                       ).createShader(bounds);
                     },
-                    child: Text(
+                    child: const Text(
                       'Dokki',
                       style: TextStyle(
                         fontSize: 48,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                         letterSpacing: -1,
-                        fontFamily: GoogleFonts.nunito().fontFamily,
                       ),
                     ),
                   ),
                 ),
                 const SizedBox(height: 12),
-                Center(
+                const Center(
                   child: Text(
                     'Вход в систему',
                     style: TextStyle(
                       color: AppColors.textSecondary,
                       fontSize: 16,
-                      fontFamily: GoogleFonts.nunito().fontFamily,
                     ),
                   ),
                 ),
@@ -132,10 +126,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
 
                 TextField(
                   controller: _emailController,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: GoogleFonts.nunito().fontFamily,
-                  ),
+                  style: const TextStyle(color: Colors.white),
                   decoration: _buildInputDecoration('Email'),
                   keyboardType: TextInputType.emailAddress,
                   enabled: !_isLoading,
@@ -143,10 +134,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                 const SizedBox(height: 16),
                 TextField(
                   controller: _passwordController,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: GoogleFonts.nunito().fontFamily,
-                  ),
+                  style: const TextStyle(color: Colors.white),
                   decoration: _buildInputDecoration('Пароль'),
                   obscureText: true,
                   enabled: !_isLoading,
@@ -170,13 +158,12 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: Text(
+                      child: const Text(
                         'ВОЙТИ',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                           letterSpacing: 1,
-                          fontFamily: GoogleFonts.nunito().fontFamily,
                         ),
                       ),
                     ),
@@ -195,13 +182,12 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: Text(
+                      child: const Text(
                         'ЗАРЕГИСТРИРОВАТЬСЯ',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                           letterSpacing: 1,
-                          fontFamily: GoogleFonts.nunito().fontFamily,
                         ),
                       ),
                     ),

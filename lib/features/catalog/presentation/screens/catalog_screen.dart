@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+// Исправлено: путь до папки providers на два уровня выше
 import '../../providers/catalog_providers.dart';
 import '../widgets/bot_card.dart';
 
@@ -14,8 +15,8 @@ class CatalogScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Магазин'),
-        centerTitle: true,
+        title: const Text('Каталог ИИ-ботов'),
+        centerTitle: false,
       ),
       body: botsAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
@@ -37,7 +38,8 @@ class CatalogScreen extends ConsumerWidget {
 
               return BotCard(
                 bot: bot,
-                onTap: () => context.push('/bot-detail/${bot.id}', extra: bot),
+                onConnect: () =>
+                    context.push('/connect-bot/${bot.id}/${bot.name}'),
               );
             },
           );

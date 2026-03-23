@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../bot_management/providers/bot_management_providers.dart';
 // Импорт теперь будет работать после перемещения файла
@@ -22,12 +21,10 @@ class MyBotsScreen extends ConsumerWidget {
       body: connectedBotsAsync.when(
         data: (businesses) {
           if (businesses.isEmpty) {
-            return Center(
+            return const Center(
               child: Text(
                 'У вас пока нет активных ботов',
-                style: TextStyle(
-                    color: AppColors.textSecondary,
-                    fontFamily: GoogleFonts.nunito().fontFamily),
+                style: TextStyle(color: AppColors.textSecondary),
               ),
             );
           }

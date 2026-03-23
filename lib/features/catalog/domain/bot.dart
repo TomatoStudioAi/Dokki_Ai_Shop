@@ -5,8 +5,7 @@ class Bot {
   final String category;
   final bool isActive;
   final String? githubRepo;
-  final String? imageUrl;
-  final List<String>? features; // Добавлено поле
+  final String? imageUrl; // Новое поле
 
   const Bot({
     required this.id,
@@ -15,8 +14,7 @@ class Bot {
     required this.category,
     required this.isActive,
     this.githubRepo,
-    this.imageUrl,
-    this.features, // Добавлено в конструктор
+    this.imageUrl, // Добавлено в конструктор
   });
 
   factory Bot.fromJson(Map<String, dynamic> json) {
@@ -25,11 +23,10 @@ class Bot {
       name: json['name'] as String,
       description: json['description'] as String,
       category: json['category'] as String,
+      // Маппинг snake_case из БД в camelCase модели
       isActive: json['is_active'] as bool,
       githubRepo: json['github_repo'] as String?,
-      imageUrl: json['image_url'] as String?,
-      // Маппинг списка фич
-      features: (json['features'] as List?)?.map((e) => e.toString()).toList(),
+      imageUrl: json['image_url'] as String?, // Маппинг нового поля
     );
   }
 }

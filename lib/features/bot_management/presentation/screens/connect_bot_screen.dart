@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import '../../../../core/env/env.dart';
 import '../../../../core/theme/app_theme.dart';
@@ -153,10 +152,7 @@ class _ConnectBotScreenState extends ConsumerState<ConnectBotScreen> {
   InputDecoration _buildInputDecoration(String hint, IconData icon) {
     return InputDecoration(
       hintText: hint,
-      hintStyle: TextStyle(
-        color: AppColors.textSecondary,
-        fontFamily: GoogleFonts.nunito().fontFamily,
-      ),
+      hintStyle: const TextStyle(color: AppColors.textSecondary),
       filled: true,
       fillColor: AppColors.card,
       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
@@ -215,14 +211,13 @@ class _ConnectBotScreenState extends ConsumerState<ConnectBotScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             'ИНСТРУКЦИЯ',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 12,
               color: AppColors.textSecondary,
               letterSpacing: 1.2,
-              fontFamily: GoogleFonts.nunito().fontFamily,
             ),
           ),
           const SizedBox(height: 12),
@@ -233,37 +228,27 @@ class _ConnectBotScreenState extends ConsumerState<ConnectBotScreen> {
               borderRadius: BorderRadius.circular(16),
               border: Border.all(color: AppColors.border, width: 1),
             ),
-            child: Text(
+            child: const Text(
               '1. Откройте @BotFather.\n'
               '2. Сгенерируйте НОВЫЙ токен (Revoke), если старый был скомпрометирован.\n'
               '3. Вставьте новый токен в поле ниже.',
-              style: TextStyle(
-                height: 1.6,
-                color: Colors.white,
-                fontSize: 14,
-                fontFamily: GoogleFonts.nunito().fontFamily,
-              ),
+              style: TextStyle(height: 1.6, color: Colors.white, fontSize: 14),
             ),
           ),
           const SizedBox(height: 32),
-          Text(
+          const Text(
             'API ТОКЕН',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 12,
               color: AppColors.textSecondary,
               letterSpacing: 1.2,
-              fontFamily: GoogleFonts.nunito().fontFamily,
             ),
           ),
           const SizedBox(height: 12),
           TextField(
             controller: _botTokenController,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontFamily: GoogleFonts.nunito().fontFamily,
-            ),
+            style: const TextStyle(color: Colors.white, fontSize: 16),
             decoration:
                 _buildInputDecoration('Bot API Token', Icons.vpn_key_rounded),
             enabled: !_isLoading,
@@ -289,13 +274,10 @@ class _ConnectBotScreenState extends ConsumerState<ConnectBotScreen> {
                       child: CircularProgressIndicator(
                           color: Colors.white, strokeWidth: 2),
                     )
-                  : Text(
+                  : const Text(
                       'ПРОВЕРИТЬ И ПРОДОЛЖИТЬ',
                       style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1,
-                        fontFamily: GoogleFonts.nunito().fontFamily,
-                      ),
+                          fontWeight: FontWeight.bold, letterSpacing: 1),
                     ),
             ),
           ),
@@ -310,14 +292,13 @@ class _ConnectBotScreenState extends ConsumerState<ConnectBotScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             'ИНСТРУКЦИЯ RAILWAY',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 12,
               color: AppColors.textSecondary,
               letterSpacing: 1.2,
-              fontFamily: GoogleFonts.nunito().fontFamily,
             ),
           ),
           const SizedBox(height: 12),
@@ -328,61 +309,46 @@ class _ConnectBotScreenState extends ConsumerState<ConnectBotScreen> {
               borderRadius: BorderRadius.circular(16),
               border: Border.all(color: AppColors.border, width: 1),
             ),
-            child: Text(
+            child: const Text(
               '1. Войдите в аккаунт Railway.\n'
               '2. Создайте API Token в настройках профиля.\n'
               '3. Скопируйте ваш Workspace ID.',
-              style: TextStyle(
-                height: 1.6,
-                color: Colors.white,
-                fontSize: 14,
-                fontFamily: GoogleFonts.nunito().fontFamily,
-              ),
+              style: TextStyle(height: 1.6, color: Colors.white, fontSize: 14),
             ),
           ),
           const SizedBox(height: 32),
-          Text(
+          const Text(
             'RAILWAY API TOKEN',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 12,
               color: AppColors.textSecondary,
               letterSpacing: 1.2,
-              fontFamily: GoogleFonts.nunito().fontFamily,
             ),
           ),
           const SizedBox(height: 12),
           TextField(
             controller: _railwayTokenController,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontFamily: GoogleFonts.nunito().fontFamily,
-            ),
+            style: const TextStyle(color: Colors.white, fontSize: 16),
             decoration: _buildInputDecoration(
                 'Railway Token', Icons.cloud_queue_rounded),
             enabled: !_isLoading,
             autocorrect: false,
           ),
           const SizedBox(height: 24),
-          Text(
+          const Text(
             'WORKSPACE ID',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 12,
               color: AppColors.textSecondary,
               letterSpacing: 1.2,
-              fontFamily: GoogleFonts.nunito().fontFamily,
             ),
           ),
           const SizedBox(height: 12),
           TextField(
             controller: _workspaceIdController,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontFamily: GoogleFonts.nunito().fontFamily,
-            ),
+            style: const TextStyle(color: Colors.white, fontSize: 16),
             decoration:
                 _buildInputDecoration('Workspace ID', Icons.grid_view_rounded),
             enabled: !_isLoading,
@@ -408,13 +374,10 @@ class _ConnectBotScreenState extends ConsumerState<ConnectBotScreen> {
                       child: CircularProgressIndicator(
                           color: Colors.white, strokeWidth: 2),
                     )
-                  : Text(
+                  : const Text(
                       'ПОДКЛЮЧИТЬ И ЗАДЕПЛОИТЬ',
                       style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1,
-                        fontFamily: GoogleFonts.nunito().fontFamily,
-                      ),
+                          fontWeight: FontWeight.bold, letterSpacing: 1),
                     ),
             ),
           ),

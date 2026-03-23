@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_theme.dart'; // Импорт темы
 import '../../domain/business.dart';
 import '../../providers/bot_management_providers.dart';
@@ -59,21 +58,15 @@ class AppointmentsScreen extends ConsumerWidget {
             padding: const EdgeInsets.all(16.0),
             child: Text('Ошибка загрузки: $err',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: GoogleFonts.nunito().fontFamily,
-                )),
+                style: const TextStyle(color: Colors.white)),
           ),
         ),
         data: (appointments) {
           if (appointments.isEmpty) {
-            return Center(
+            return const Center(
               child: Text(
                 'Список записей пуст',
-                style: TextStyle(
-                  color: AppColors.textSecondary,
-                  fontFamily: GoogleFonts.nunito().fontFamily,
-                ),
+                style: TextStyle(color: AppColors.textSecondary),
               ),
             );
           }
@@ -120,20 +113,18 @@ class AppointmentsScreen extends ConsumerWidget {
                           Text(
                             appointment['client_name']?.toString() ??
                                 'Клиент без имени',
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
-                              fontFamily: GoogleFonts.nunito().fontFamily,
                             ),
                           ),
                           const SizedBox(height: 4),
                           Text(
                             _formatDateTime(dateString),
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: AppColors.textSecondary,
                               fontSize: 13,
-                              fontFamily: GoogleFonts.nunito().fontFamily,
                             ),
                           ),
                         ],
@@ -156,7 +147,6 @@ class AppointmentsScreen extends ConsumerWidget {
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
                           letterSpacing: 0.5,
-                          fontFamily: GoogleFonts.nunito().fontFamily,
                         ),
                       ),
                     ),

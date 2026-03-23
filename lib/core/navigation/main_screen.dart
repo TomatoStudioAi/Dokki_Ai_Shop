@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../theme/app_theme.dart';
 import '../../features/catalog/presentation/screens/catalog_screen.dart';
 import '../../features/my_bots/presentation/screens/my_bots_screen.dart';
@@ -40,41 +39,25 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: _onTap,
-        // Обновленные стили под светлую тему
-        backgroundColor: AppColors.card,
+        backgroundColor: AppColors.background,
         selectedItemColor: AppColors.accent,
         unselectedItemColor: AppColors.textSecondary,
-        elevation: 8,
         type: BottomNavigationBarType.fixed,
-        selectedLabelStyle: TextStyle(
-          fontWeight: FontWeight.w700,
-          fontSize: 12,
-          fontFamily: GoogleFonts.nunito().fontFamily,
-        ),
-        unselectedLabelStyle: TextStyle(
-          fontWeight: FontWeight.w500,
-          fontSize: 12,
-          fontFamily: GoogleFonts.nunito().fontFamily,
-        ),
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.storefront_outlined),
-            activeIcon: Icon(Icons.storefront),
             label: 'Магазин',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.smart_toy_outlined),
-            activeIcon: Icon(Icons.smart_toy),
             label: 'Мои боты',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings_outlined),
-            activeIcon: Icon(Icons.settings),
             label: 'Настройки',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.headset_mic_outlined),
-            activeIcon: Icon(Icons.headset_mic),
             label: 'Поддержка',
           ),
         ],

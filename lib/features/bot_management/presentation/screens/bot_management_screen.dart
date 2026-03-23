@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
-import '../../../../core/theme/app_theme.dart';
+import '../../../../core/theme/app_theme.dart'; // Импорт темы
 import '../../domain/business.dart';
 import 'appointments_screen.dart';
 import 'bot_config_screen.dart';
@@ -19,38 +18,28 @@ class BotManagementScreen extends ConsumerWidget {
     final bool isActivated = business.telegramGroupId != null;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.background, // Тёмный фон
       appBar: AppBar(
         title: const Text('Управление ботом'),
-        backgroundColor: AppColors.background, // Исправлено для светлой темы
-        elevation: 0,
         centerTitle: false,
-        titleTextStyle: TextStyle(
-          color: AppColors.textPrimary,
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-          fontFamily: GoogleFonts.nunito().fontFamily,
-        ),
-        iconTheme: const IconThemeData(color: AppColors.textPrimary),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Карточка статуса бота
+            // Карточка статуса бота (переписана на Container)
             _buildStatusCard(isActivated),
             const SizedBox(height: 32),
 
             // Основные действия
-            Text(
+            const Text(
               'ДЕЙСТВИЯ',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 12,
                 color: AppColors.textSecondary,
                 letterSpacing: 1.2,
-                fontFamily: GoogleFonts.nunito().fontFamily,
               ),
             ),
             const SizedBox(height: 16),
@@ -69,18 +58,13 @@ class BotManagementScreen extends ConsumerWidget {
                 icon: const Icon(Icons.format_list_bulleted_rounded, size: 20),
                 label: const Text('ЗАПИСИ'),
                 style: OutlinedButton.styleFrom(
-                  // ПРАВКА 2: Замена белого на темный текст
-                  foregroundColor: AppColors.textPrimary,
+                  foregroundColor: Colors.white,
                   side: const BorderSide(color: AppColors.border, width: 1.5),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                   alignment: Alignment.centerLeft,
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  textStyle: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontFamily: GoogleFonts.nunito().fontFamily,
-                  ),
                 ),
               ),
             ),
@@ -101,40 +85,33 @@ class BotManagementScreen extends ConsumerWidget {
                 icon: const Icon(Icons.settings_suggest_rounded, size: 20),
                 label: const Text('НАСТРОЙКИ ПРОМПТА'),
                 style: OutlinedButton.styleFrom(
-                  // ПРАВКА 2: Замена белого на темный текст
-                  foregroundColor: AppColors.textPrimary,
+                  foregroundColor: Colors.white,
                   side: const BorderSide(color: AppColors.border, width: 1.5),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                   alignment: Alignment.centerLeft,
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  textStyle: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontFamily: GoogleFonts.nunito().fontFamily,
-                  ),
                 ),
               ),
             ),
 
             const SizedBox(height: 32),
 
-            // Кнопка активации
+            // Кнопка активации (появится, если группа еще не привязана)
             if (!isActivated)
               SizedBox(
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton.icon(
                   onPressed: () {
-                    // TODO: Логика Stage 2.2
+                    // TODO: Логика Stage 2.2 (Активация группы)
                   },
                   icon: const Icon(Icons.group_add_rounded),
-                  label: Text(
+                  label: const Text(
                     'АКТИВИРОВАТЬ ГРУППУ',
                     style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1,
-                        fontFamily: GoogleFonts.nunito().fontFamily),
+                        fontWeight: FontWeight.bold, letterSpacing: 1),
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.accent,
@@ -165,7 +142,7 @@ class BotManagementScreen extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: (isActivated ? AppColors.success : AppColors.warning)
+              color: (isActivated ? Colors.green : Colors.orange)
                   .withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
@@ -173,7 +150,7 @@ class BotManagementScreen extends ConsumerWidget {
               isActivated
                   ? Icons.check_circle_rounded
                   : Icons.pending_actions_rounded,
-              color: isActivated ? AppColors.success : AppColors.warning,
+              color: isActivated ? Colors.green : Colors.orange,
               size: 32,
             ),
           ),
@@ -184,12 +161,10 @@ class BotManagementScreen extends ConsumerWidget {
               children: [
                 Text(
                   isActivated ? 'Бот активен' : 'Требуется настройка',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 18,
-                    // ПРАВКА 1: Замена белого на темный текст
-                    color: AppColors.textPrimary,
-                    fontFamily: GoogleFonts.nunito().fontFamily,
+                    color: Colors.white,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -197,10 +172,8 @@ class BotManagementScreen extends ConsumerWidget {
                   isActivated
                       ? 'Бот готов к приему заказов'
                       : 'Привяжите Telegram группу',
-                  style: TextStyle(
-                      fontSize: 14,
-                      color: AppColors.textSecondary,
-                      fontFamily: GoogleFonts.nunito().fontFamily),
+                  style: const TextStyle(
+                      fontSize: 14, color: AppColors.textSecondary),
                 ),
               ],
             ),

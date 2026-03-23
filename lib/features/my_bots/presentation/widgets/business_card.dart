@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import '../../../../core/theme/app_theme.dart';
+// Исправлено: импорт модели из правильной папки
 import '../../../bot_management/domain/business.dart';
 
 class BusinessCard extends StatelessWidget {
@@ -29,14 +28,14 @@ class BusinessCard extends StatelessWidget {
 
     if (business.status == 'active' && business.telegramGroupId != null) {
       label = 'В работе';
-      color = AppColors.success;
+      color = Colors.green;
     } else if (business.status == 'active' &&
         business.telegramGroupId == null) {
       label = 'Настройка';
-      color = AppColors.warning;
+      color = Colors.orange;
     } else {
       label = 'Выкл';
-      color = AppColors.error;
+      color = Colors.red;
     }
 
     return Row(
@@ -60,11 +59,10 @@ class BusinessCard extends StatelessWidget {
         const SizedBox(width: 8),
         Text(
           label,
-          style: TextStyle(
+          style: const TextStyle(
             color: AppColors.textSecondary,
             fontSize: 12,
             fontWeight: FontWeight.w500,
-            fontFamily: GoogleFonts.nunito().fontFamily,
           ),
         ),
       ],
@@ -73,8 +71,6 @@ class BusinessCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const fallbackColor = Color(0xFFF5F0FF);
-
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
@@ -88,40 +84,22 @@ class BusinessCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                // Иллюстрация бота 80x80
+                // Иконка робота в градиенте
                 Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    color: fallbackColor,
-                    borderRadius: BorderRadius.circular(12),
+                  width: 64,
+                  height: 64,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: LinearGradient(
+                      colors: [Color(0xFF0EA5E9), Color(0xFF2563EB)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
                   ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: business.botImageUrl != null
-                        ? CachedNetworkImage(
-                            imageUrl: business.botImageUrl!,
-                            fit: BoxFit.contain,
-                            alignment: Alignment.bottomCenter,
-                            placeholder: (context, url) => const Center(
-                              child: SizedBox(
-                                width: 20,
-                                height: 20,
-                                child:
-                                    CircularProgressIndicator(strokeWidth: 2),
-                              ),
-                            ),
-                            errorWidget: (context, url, error) => const Icon(
-                              Icons.smart_toy_outlined,
-                              size: 32,
-                              color: AppColors.textSecondary,
-                            ),
-                          )
-                        : const Icon(
-                            Icons.smart_toy_outlined,
-                            size: 32,
-                            color: AppColors.textSecondary,
-                          ),
+                  child: const Icon(
+                    Icons.smart_toy_rounded,
+                    color: Colors.white,
+                    size: 32,
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -131,11 +109,10 @@ class BusinessCard extends StatelessWidget {
                     children: [
                       Text(
                         _formatBotId(business.botId),
-                        style: TextStyle(
-                          color: AppColors.textPrimary,
+                        style: const TextStyle(
+                          color: Colors.white,
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          fontFamily: GoogleFonts.nunito().fontFamily,
                         ),
                       ),
                       const SizedBox(height: 6),
@@ -159,12 +136,11 @@ class BusinessCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: Text(
+                child: const Text(
                   'УПРАВЛЕНИЕ',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     letterSpacing: 1,
-                    fontFamily: GoogleFonts.nunito().fontFamily,
                   ),
                 ),
               ),
