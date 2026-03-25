@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../auth/providers/auth_providers.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
   final String currentEmail;
@@ -12,25 +13,11 @@ class ProfileScreen extends ConsumerStatefulWidget {
 }
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
-  late final TextEditingController _emailController;
-
-  @override
-  void initState() {
-    super.initState();
-    _emailController = TextEditingController(text: widget.currentEmail);
-  }
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    super.dispose();
-  }
-
   void _notify(String message, {bool isError = false}) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: isError ? AppColors.error : Colors.green,
+        backgroundColor: isError ? AppColors.error : AppColors.accent,
       ),
     );
   }
@@ -44,28 +31,37 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       context: context,
       builder: (c) => AlertDialog(
         backgroundColor: AppColors.surface,
-        title:
-            const Text('Сменить пароль', style: TextStyle(fontFamily: 'Inter')),
+        title: const Text('Сменить пароль',
+            style:
+                TextStyle(fontFamily: 'Inter', color: AppColors.textPrimary)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
               controller: oldPasswordController,
               obscureText: true,
-              decoration: const InputDecoration(labelText: 'Текущий пароль'),
+              style: const TextStyle(color: AppColors.textPrimary),
+              decoration: const InputDecoration(
+                  labelText: 'Текущий пароль',
+                  labelStyle: TextStyle(color: AppColors.textSecondary)),
             ),
             const SizedBox(height: 16),
             TextField(
               controller: newPasswordController,
               obscureText: true,
-              decoration: const InputDecoration(labelText: 'Новый пароль'),
+              style: const TextStyle(color: AppColors.textPrimary),
+              decoration: const InputDecoration(
+                  labelText: 'Новый пароль',
+                  labelStyle: TextStyle(color: AppColors.textSecondary)),
             ),
             const SizedBox(height: 16),
             TextField(
               controller: confirmPasswordController,
               obscureText: true,
-              decoration:
-                  const InputDecoration(labelText: 'Повторите новый пароль'),
+              style: const TextStyle(color: AppColors.textPrimary),
+              decoration: const InputDecoration(
+                  labelText: 'Повторите новый пароль',
+                  labelStyle: TextStyle(color: AppColors.textSecondary)),
             ),
           ],
         ),
@@ -101,20 +97,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
   }
 
-  void _saveEmail() {
-    final email = _emailController.text.trim();
-    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-
-    if (email.isEmpty || !emailRegex.hasMatch(email)) {
-      _notify('Введите корректный email', isError: true);
-      return;
-    }
-
-    // TODO: Supabase.auth.updateUser(email: email)
-    _notify('Email обновлён');
-    Navigator.pop(context, email);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -133,98 +115,63 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         elevation: 0,
         iconTheme: const IconThemeData(color: AppColors.textPrimary),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Email',
-              style: TextStyle(
-                color: AppColors.textSecondary,
-                fontSize: 14,
-                fontFamily: 'Inter',
-              ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const SizedBox(height: 32),
+          const Center(
+            child: CircleAvatar(
+              radius: 40,
+              backgroundColor: AppColors.accent,
+              child: Icon(Icons.person, color: AppColors.surface, size: 40),
             ),
-            const SizedBox(height: 8),
-            TextField(
-              controller: _emailController,
-              keyboardType: TextInputType.emailAddress,
+          ),
+          const SizedBox(height: 16),
+          Center(
+            child: Text(
+              widget.currentEmail,
               style: const TextStyle(
-                fontSize: 18,
+                fontWeight: FontWeight.bold,
                 color: AppColors.textPrimary,
+                fontSize: 18,
                 fontFamily: 'Inter',
               ),
-              decoration: InputDecoration(
-                isDense: true,
-                contentPadding:
-                    const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide(
-                    color: AppColors.textSecondary.withValues(alpha: 0.3),
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide:
-                      const BorderSide(color: AppColors.accent, width: 2),
-                ),
-              ),
             ),
-            const SizedBox(height: 32),
-
-            // Кнопка сохранения Email
-            SizedBox(
-              width: double.infinity,
-              height: 52,
-              child: ElevatedButton(
-                onPressed: _saveEmail,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.accent,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                  elevation: 0,
-                ),
-                child: const Text(
-                  'СОХРАНИТЬ EMAIL',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    fontFamily: 'Inter',
-                    letterSpacing: 0.5,
-                  ),
-                ),
-              ),
+          ),
+          const SizedBox(height: 40),
+          ListTile(
+            tileColor: AppColors.surface,
+            leading: const Icon(Icons.lock_outline, color: AppColors.accent),
+            title: const Text(
+              'Сменить пароль',
+              style: TextStyle(
+                  color: AppColors.textPrimary,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Inter'),
             ),
-            const SizedBox(height: 16),
-
-            // Кнопка смены пароля
-            SizedBox(
-              width: double.infinity,
-              height: 52,
-              child: OutlinedButton(
-                onPressed: _showChangePasswordDialog,
-                style: OutlinedButton.styleFrom(
-                  side: const BorderSide(color: AppColors.accent, width: 1.5),
-                  foregroundColor: AppColors.accent,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                ),
-                child: const Text(
-                  'СМЕНИТЬ ПАРОЛЬ',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    fontFamily: 'Inter',
-                    letterSpacing: 0.5,
-                  ),
-                ),
-              ),
+            trailing:
+                const Icon(Icons.chevron_right, color: AppColors.textSecondary),
+            onTap: _showChangePasswordDialog,
+          ),
+          const Divider(color: AppColors.border, height: 1),
+          ListTile(
+            tileColor: AppColors.surface,
+            leading: const Icon(Icons.logout, color: AppColors.error),
+            title: const Text(
+              'Выйти из аккаунта',
+              style: TextStyle(
+                  color: AppColors.error,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Inter'),
             ),
-          ],
-        ),
+            trailing:
+                const Icon(Icons.chevron_right, color: AppColors.textSecondary),
+            onTap: () async {
+              await ref.read(authRepositoryProvider).signOut();
+            },
+          ),
+          const Divider(color: AppColors.border, height: 1),
+        ],
       ),
     );
   }

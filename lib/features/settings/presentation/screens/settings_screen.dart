@@ -78,26 +78,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             subtitle: 'Версия 1.0.0',
             onTap: _showAboutDialog,
           ),
-          const Divider(color: AppColors.border, height: 1, thickness: 2),
-          _buildListTile(
-            icon: FontAwesomeIcons.arrowRightFromBracket,
-            title: 'Выйти из аккаунта',
-            onTap: user != null
-                ? () async => await ref.read(authRepositoryProvider).signOut()
-                : () {},
-            titleColor:
-                user != null ? AppColors.error : AppColors.textSecondary,
-            iconColor: user != null ? AppColors.error : AppColors.textSecondary,
-          ),
-          const Divider(color: AppColors.border, height: 1),
-          _buildListTile(
-            icon: FontAwesomeIcons.userXmark,
-            title: 'Удалить аккаунт',
-            onTap: user != null ? _confirmDelete : () {},
-            titleColor:
-                user != null ? AppColors.error : AppColors.textSecondary,
-            iconColor: user != null ? AppColors.error : AppColors.textSecondary,
-          ),
           const Divider(color: AppColors.border, height: 1),
         ],
       ),
@@ -183,25 +163,4 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               .showSnackBar(SnackBar(content: Text('Открыть $name')));
         },
       );
-
-  void _confirmDelete() {
-    showDialog(
-      context: context,
-      builder: (c) => AlertDialog(
-        title: const Text('Удалить аккаунт?'),
-        content: const Text('Все данные будут удалены безвозвратно'),
-        actions: [
-          TextButton(
-              onPressed: () => Navigator.pop(c), child: const Text('Отмена')),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(c);
-            },
-            child:
-                const Text('Удалить', style: TextStyle(color: AppColors.error)),
-          ),
-        ],
-      ),
-    );
-  }
 }
