@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/supabase/supabase_client.dart';
+import '../../../../core/localization/language_provider.dart';
+import '../../../../core/localization/app_strings.dart';
 
 class AuthScreen extends ConsumerStatefulWidget {
   const AuthScreen({super.key});
@@ -17,6 +19,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   bool _isLoginMode = true;
   bool _isLoading = false;
   bool _obscurePassword = true;
+  late AppStrings _s;
 
   @override
   void dispose() {
@@ -36,7 +39,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     final password = _passwordController.text;
 
     if (email.isEmpty || password.isEmpty) {
-      _showError('Заполните все поля');
+      _showError(_s.authFieldsRequired);
       return;
     }
 
@@ -50,8 +53,8 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
         await supabase.auth.signUp(email: email, password: password);
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-                content: Text('Проверьте почту для подтверждения'),
+            SnackBar(
+                content: Text(_s.authCheckEmail),
                 backgroundColor: AppColors.accent),
           );
         }
@@ -59,7 +62,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     } on AuthException catch (e) {
       _showError(e.message);
     } catch (e) {
-      _showError('Произошла ошибка: $e');
+      _showError('${_s.authError}: $e');
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -67,6 +70,9 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final s = ref.watch(stringsProvider);
+    _s = s;
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -93,7 +99,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
               ),
               const SizedBox(height: 8),
               Text(
-                _isLoginMode ? 'Вход в систему' : 'Создать аккаунт',
+                _isLoginMode ? s.authLogin : s.authRegistration,
                 style: const TextStyle(
                   fontSize: 16,
                   color: AppColors.textSecondary,
@@ -110,7 +116,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                     color: AppColors.textSecondary),
               ),
               const SizedBox(height: 20),
-              _buildLabel('Пароль'),
+              _buildLabel(s.authPassword),
               const SizedBox(height: 8),
               _buildTextField(
                 _passwordController,
@@ -132,8 +138,8 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                   alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: () {},
-                    child: const Text('Забыли пароль?',
-                        style: TextStyle(
+                    child: Text(s.authForgotPassword,
+                        style: const TextStyle(
                             color: AppColors.accent, fontFamily: 'Inter')),
                   ),
                 ),
@@ -156,7 +162,9 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                           child: CircularProgressIndicator(
                               color: AppColors.surface, strokeWidth: 2))
                       : Text(
-                          _isLoginMode ? 'ВОЙТИ' : 'ЗАРЕГИСТРИРОВАТЬСЯ',
+                          _isLoginMode
+                              ? s.authLogin.toUpperCase()
+                              : s.authRegistration.toUpperCase(),
                           style: const TextStyle(
                             color: AppColors.surface,
                             fontWeight: FontWeight.bold,
@@ -173,8 +181,8 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                   const Expanded(child: Divider(color: AppColors.border)),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Text('или',
-                        style: TextStyle(
+                    child: Text(s.authOr,
+                        style: const TextStyle(
                             color: AppColors.textSecondary,
                             fontFamily: 'Inter')),
                   ),
@@ -187,8 +195,8 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                   child: OutlinedButton.icon(
                     icon: Image.network('https://www.google.com/favicon.ico',
                         height: 20),
-                    label: const Text('Войти через Google',
-                        style: TextStyle(
+                    label: Text(s.authGoogle,
+                        style: const TextStyle(
                             color: AppColors.textPrimary, fontFamily: 'Inter')),
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: AppColors.border),
@@ -220,9 +228,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
               TextButton(
                 onPressed: () => setState(() => _isLoginMode = !_isLoginMode),
                 child: Text(
-                  _isLoginMode
-                      ? 'Нет аккаунта? Регистрация'
-                      : 'Уже есть аккаунт? Войти',
+                  _isLoginMode ? s.authNoAccount : s.authHasAccount,
                   style: const TextStyle(
                     color: AppColors.accent,
                     fontWeight: FontWeight.w600,
