@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:supabase_flutter/supabase_flutter.dart'; // Добавили для UserAttributes
 import '../../../../core/theme/app_theme.dart';
 import '../../../auth/providers/auth_providers.dart';
 import '../../../../core/localization/language_provider.dart';
 import '../../../../core/localization/app_strings.dart';
+import '../../../../core/supabase/supabase_client.dart'; // Импорт провайдера клиента
 
 class ProfileScreen extends ConsumerStatefulWidget {
   final String currentEmail;
@@ -18,6 +20,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   late AppStrings _s;
 
   void _notify(String message, {bool isError = false}) {
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
@@ -27,7 +30,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   }
 
   void _showChangePasswordDialog() {
-    final oldPasswordController = TextEditingController();
     final newPasswordController = TextEditingController();
     final confirmPasswordController = TextEditingController();
 
@@ -36,20 +38,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       builder: (c) => AlertDialog(
         backgroundColor: AppColors.surface,
         title: Text(_s.profChangePass,
-            style:
-                const TextStyle(fontFamily: 'Inter', color: AppColors.textPrimary)),
+            style: const TextStyle(
+                fontFamily: 'Inter', color: AppColors.textPrimary)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextField(
-              controller: oldPasswordController,
-              obscureText: true,
-              style: const TextStyle(color: AppColors.textPrimary),
-              decoration: InputDecoration(
-                  labelText: _s.profCurrentPass,
-                  labelStyle: const TextStyle(color: AppColors.textSecondary)),
-            ),
-            const SizedBox(height: 16),
             TextField(
               controller: newPasswordController,
               obscureText: true,
@@ -77,20 +70,29 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           ),
           TextButton(
             onPressed: () async {
+              // 1. Валидация совпадения
               if (newPasswordController.text !=
                   confirmPasswordController.text) {
                 _notify(_s.profPassMismatch, isError: true);
                 return;
               }
+              // 2. Валидация длины
               if (newPasswordController.text.length < 6) {
                 _notify(_s.profPassLength, isError: true);
                 return;
               }
 
-              // TODO: Supabase.auth.updateUser(password: newPasswordController.text)
+              try {
+                // 3. Запрос в Supabase
+                await ref.read(supabaseClientProvider).auth.updateUser(
+                      UserAttributes(password: newPasswordController.text),
+                    );
 
-              Navigator.pop(c);
-              _notify(_s.profPassSuccess);
+                if (c.mounted) Navigator.pop(c);
+                _notify(_s.profPassSuccess);
+              } catch (e) {
+                _notify(_s.authError, isError: true);
+              }
             },
             child: Text(_s.profSave,
                 style: const TextStyle(

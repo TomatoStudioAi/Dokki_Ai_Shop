@@ -7,7 +7,6 @@ import '../navigation/main_screen.dart';
 import '../../features/bot_management/presentation/screens/connect_bot_screen.dart';
 import '../supabase/supabase_client.dart';
 import '../../features/catalog/presentation/screens/bot_detail_screen.dart';
-import '../../features/catalog/domain/bot.dart';
 import '../../features/payment/presentation/screens/payment_screen.dart';
 import '../../features/settings/presentation/screens/profile_screen.dart';
 import '../../features/settings/presentation/screens/language_screen.dart';
@@ -26,10 +25,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       final isLoggedIn = supabase.auth.currentSession != null;
       final location = state.matchedLocation;
 
-      final isProtectedRoute = location.startsWith('/profile') ||
-          location.startsWith('/payment') ||
-          location.startsWith('/connect-bot') ||
-          location.startsWith('/bot-management');
+      final isProtectedRoute =
+          location.startsWith('/profile') | location.startsWith('/payment') ||
+              location.startsWith('/connect-bot') ||
+              location.startsWith('/bot-management');
 
       final isAuthRoute = location == '/auth';
 
@@ -67,9 +66,12 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/notifications',
         builder: (context, state) => const NotificationsScreen(),
       ),
+      // Обновленный маршрут: принимаем категорию из URL
       GoRoute(
-        path: '/bot-detail/:botId',
-        builder: (context, state) => BotDetailScreen(bot: state.extra as Bot),
+        path: '/bot-detail/:category',
+        builder: (context, state) => BotDetailScreen(
+          category: state.pathParameters['category']!,
+        ),
       ),
       GoRoute(
         path: '/payment',

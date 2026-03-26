@@ -103,7 +103,6 @@ class BotManagementScreen extends ConsumerWidget {
                 height: 56,
                 child: ElevatedButton.icon(
                   onPressed: () {
-                    // TODO: Логика Stage 2.2 (Активация группы)
                   },
                   icon: const Icon(Icons.group_add_rounded),
                   label: Text(
