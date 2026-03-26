@@ -95,7 +95,7 @@ class BusinessCard extends ConsumerWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      s.mapCategory(business.botId.replaceAll('dokki-', '')),
+                      AppStrings.mapCategory(business.botId.replaceAll('dokki-', '')),
                       style: const TextStyle(
                         fontSize: 13,
                         color: AppColors.textSecondary,

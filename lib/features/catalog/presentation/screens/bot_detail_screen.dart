@@ -61,7 +61,7 @@ class BotDetailScreen extends ConsumerWidget {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          s.mapCategory(bot.category),
+                          AppStrings.mapCategory(bot.category),
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                         const SizedBox(height: 8),
@@ -111,7 +111,7 @@ class BotDetailScreen extends ConsumerWidget {
                                     const SizedBox(width: 12),
                                     Expanded(
                                       child: Text(
-                                        s.translateFeature(feature['label']?.toString() ?? ''),
+                                        AppStrings.translateFeature(feature['label']?.toString() ?? ''),
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyLarge,
