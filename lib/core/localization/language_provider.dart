@@ -34,9 +34,8 @@ class LanguageNotifier extends StateNotifier<AppLanguage> {
           (e) => e.toString() == savedLanguage,
           orElse: () => AppLanguage.en,
         );
-        print('Loaded language from storage: $state');
-      } catch (e) {
-        print('Error parsing language from storage: $e');
+      } catch (_) {
+        // В случае ошибки парсинга остается язык по умолчанию
       }
     }
   }
@@ -49,9 +48,8 @@ class LanguageNotifier extends StateNotifier<AppLanguage> {
 
     try {
       await _prefs.setString(_key, language.toString());
-      print('Saved language to storage: $language');
-    } catch (e) {
-      print('Error saving language to storage: $e');
+    } catch (_) {
+      // Ошибки записи не критичны для работы приложения
     }
   }
 }

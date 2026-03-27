@@ -1,12 +1,13 @@
 import '../../../core/localization/app_strings.dart';
 
 class Bot {
+  // Базовые поля модели
   final String id;
   final String name;
   final String description;
   final String shortDescription;
   final String _categoryKey;
-  final String tier; // 'basic', 'plus', 'pro'
+  final String tier;
   final String? imageUrl;
   final List<String>? features;
   final String? githubRepo;
@@ -14,9 +15,9 @@ class Bot {
   final double? priceYearly;
   final List<Map<String, dynamic>>? shortFeatures;
 
-  // Геттер для автоматической локализации категории через статический метод
-  String get category => AppStrings.mapCategory(_categoryKey);
-  String get categoryKey => _categoryKey; // Сырой ключ категории для фильтрации
+  // Поля для локализации (описания)
+  final String? descriptionRu;
+  final String? descriptionAr;
 
   Bot({
     required this.id,
@@ -31,7 +32,13 @@ class Bot {
     this.priceMonthly,
     this.priceYearly,
     this.shortFeatures,
+    this.descriptionRu,
+    this.descriptionAr,
   }) : _categoryKey = category;
+
+  // Геттеры для категорий
+  String get category => AppStrings.mapCategory(_categoryKey);
+  String get categoryKey => _categoryKey;
 
   factory Bot.fromJson(Map<String, dynamic> json) {
     return Bot(
@@ -50,6 +57,40 @@ class Bot {
       shortFeatures: (json['short_features'] as List?)
           ?.map((e) => e as Map<String, dynamic>)
           .toList(),
+      // Маппинг локализованных полей из БД
+      descriptionRu: json['description_ru'] as String?,
+      descriptionAr: json['description_ar'] as String?,
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'description': description,
+      'specialization': shortDescription,
+      'category': _categoryKey,
+      'tier': tier,
+      'image_url': imageUrl,
+      'features': features,
+      'github_repo': githubRepo,
+      'price_monthly': priceMonthly,
+      'price_yearly': priceYearly,
+      'short_features': shortFeatures,
+      'description_ru': descriptionRu,
+      'description_ar': descriptionAr,
+    };
+  }
+
+  /// Получение локализованного описания (полного)
+  String getLocalizedDescription(AppLanguage language) {
+    switch (language) {
+      case AppLanguage.ru:
+        return descriptionRu ?? description;
+      case AppLanguage.ar:
+        return descriptionAr ?? description;
+      case AppLanguage.en:
+        return description;
+    }
   }
 }

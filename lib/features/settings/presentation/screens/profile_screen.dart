@@ -1,8 +1,8 @@
-import 'package:flutter/foundation.dart'; // Для kDebugMode и debugPrint
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:go_router/go_router.dart'; // Для явного редиректа
+import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../auth/providers/auth_providers.dart';
 import '../../../../core/localization/language_provider.dart';
@@ -22,7 +22,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   late AppStrings _s;
 
   void _notify(String message, {bool isError = false}) {
-    if (!mounted) return;
+    if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
@@ -90,7 +90,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       UserAttributes(password: newPasswordController.text),
                     );
 
-                if (c.mounted) Navigator.pop(c);
+                // Защита: проверяем, что диалог еще открыт
+                if (!c.mounted) return;
+                Navigator.pop(c);
                 _notify(_s.profPassSuccess);
               } catch (e) {
                 _notify(_s.authError, isError: true);
@@ -187,8 +189,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
               if (kDebugMode) debugPrint('=== DEBUG: Sign out SUCCESS ===');
 
-              // 2. Явный редирект на экран входа
-              if (mounted) {
+              // 2. Явный редирект на экран входа с проверкой mounted
+              if (context.mounted) {
                 if (kDebugMode) debugPrint('→ Manual redirect to /auth');
                 context.go('/auth');
               }
