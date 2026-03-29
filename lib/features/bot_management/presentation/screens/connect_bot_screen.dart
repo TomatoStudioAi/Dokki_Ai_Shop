@@ -109,7 +109,6 @@ class _ConnectBotScreenState extends ConsumerState<ConnectBotScreen> {
       // 2. Получить данные бота из каталога
       final bot = await ref.read(botByIdProvider(widget.botId).future);
 
-      // --- ВАЛИДАЦИЯ GITHUB REPO ---
       if (bot == null) {
         throw Exception('Данные бота не найдены');
       }
@@ -121,9 +120,8 @@ class _ConnectBotScreenState extends ConsumerState<ConnectBotScreen> {
 
       debugPrint('🔵 Bot loaded: ${bot.name}');
       debugPrint('🔵 GitHub repo: $githubRepo');
-      // ------------------------------
 
-      // 3. Отправить на deploy-service и ДОЖДАТЬСЯ ответа
+      // 3. Отправить на deploy-service
       final deployResponse = await http.post(
         Uri.parse('${Env.deployServiceUrl}/deploy'),
         headers: {'Content-Type': 'application/json'},
@@ -131,20 +129,25 @@ class _ConnectBotScreenState extends ConsumerState<ConnectBotScreen> {
           'businessId': result.id,
           'botId': widget.botId,
           'botToken': botToken,
-          'githubRepo': githubRepo, // Используем проверенную переменную
+          'githubRepo': githubRepo,
           'railwayToken': railwayToken,
           'railwayWorkspaceId': workspaceId,
         }),
       );
 
-      // 4. Проверить ответ сервера деплоя
-      if (deployResponse.statusCode != 200) {
+      // 4. Проверить статус ответа
+      if (deployResponse.statusCode != 200 &&
+          deployResponse.statusCode != 202) {
         throw Exception('Deploy failed: ${deployResponse.body}');
       }
 
-      // 5. Получить railwayUrl из ответа
+      // 5. Получить railwayUrl из ответа (ИСПРАВЛЕНО: добавлен ключ 'url')
       final deployData = jsonDecode(deployResponse.body);
-      final railwayUrl = deployData['railwayUrl'] ?? deployData['railway_url'];
+      final railwayUrl = deployData['railwayUrl'] ??
+          deployData['railway_url'] ??
+          deployData['url'];
+
+      debugPrint('🔵 Extracted railwayUrl: $railwayUrl');
 
       if (railwayUrl == null || railwayUrl.isEmpty) {
         throw Exception('Railway URL not received');
@@ -155,7 +158,7 @@ class _ConnectBotScreenState extends ConsumerState<ConnectBotScreen> {
           .read(businessRepositoryProvider)
           .updateRailwayUrl(result.id, railwayUrl);
 
-      // 7. Обновить локальный объект через copyWith
+      // 7. Обновить локальный объект
       final updatedResult = result.copyWith(railwayUrl: railwayUrl);
 
       if (mounted) {
@@ -166,7 +169,7 @@ class _ConnectBotScreenState extends ConsumerState<ConnectBotScreen> {
           ),
         );
 
-        // 8. Передать обновлённый объект на следующий экран настройки
+        // 8. Переход на экран настройки бота
         context.pushReplacement(
           '/bot-setup/${result.id}',
           extra: updatedResult,
